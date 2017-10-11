@@ -61,8 +61,8 @@ const ipc = require('electron').ipcMain;
 const Store = require('electron-store');
 const store = new Store();
 const notifier = require('node-notifier');
-const Tray = electron.Tray;
-const Menu = electron.Menu;
+const Tray = require('electron').Tray;
+const Menu = require('electron').Menu;
 var moment = require('moment');
 var Timer = require('time-counter');
 
@@ -236,7 +236,7 @@ async function startApp () {
 
     // tray
     const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png'
-    const iconPath = path.join('img', iconName);
+    const iconPath = path.resolve(__dirname, 'img', iconName);
     let appIcon = new Tray(iconPath);
 
     const activities = await getActivities();

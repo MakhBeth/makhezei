@@ -4,10 +4,10 @@
   "description": "Simple tool to enhance Zei functionality and add push notification on Linux",
   "main": "main.js",
   "scripts": {
-    "dev": "electron .",
+    "start": "electron .",
     "build": "electron-builder --dir",
     "dist": "electron-builder",
-    "pack": "electron-packager ./ MakheZei --all"
+    "pack": "electron-packager ./ MakheZei --mac --out ./dist --overwrite"
   },
   "repository": {
     "type": "git",
@@ -27,12 +27,9 @@
     "url": "https://github.com/MakhBeth/makhezei/issues"
   },
   "homepage": "https://github.com/MakhBeth/makhezei#readme",
-  "devDependencies": {
-    "electron-builder": "^19.36.0",
-    "electron-packager": "^9.1.0"
-  },
   "dependencies": {
-    "electron": "^1.7.8",
+    "electron-packager": "^9.1.0",
+    "electron": "^1.7.9",
     "http-debug": "^0.1.2",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
