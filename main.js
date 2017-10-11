@@ -1,11 +1,14 @@
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
+
+app.dock.hide()
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
-const path = require('path')
-const url = require('url')
+const path = require('path');
+const url = require('url');
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -234,11 +237,6 @@ async function startApp () {
         appIcon.setToolTip(countUpTimer.config.string + ' ' + time);
     });
 
-    // tray
-    const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png'
-    const iconPath = path.resolve(__dirname, 'img', iconName);
-    let appIcon = new Tray(iconPath);
-
     const activities = await getActivities();
     let menuItems = activities.map((activity) => {
         let result = {
@@ -256,14 +254,21 @@ async function startApp () {
         };
         return result;
     });
-    menuItems.push(
-        {'type': 'separator'},
+    menuItems.unshift(
         {
             'id': 'stopTracking',
             'label': 'Tracking stopped'
         },
+        {'type': 'separator'}
+    )
+    menuItems.push(
         {'type': 'separator'},
-        {'label': 'Settings'}
+        {'label': 'Settings'},
+        {'type': 'separator'},
+        {
+            'label': 'Quit',
+            click: app.quit
+        }
     );
     let stopIndex = menuItems.findIndex((el) => el.id == 'stopTracking');
     let contextMenu = Menu.buildFromTemplate(menuItems)
@@ -307,6 +312,17 @@ async function startApp () {
     }
 }
 
+let appIcon;
+
 app.on('ready', async () => {
+    // tray
+    const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png'
+    const iconPath = path.resolve(__dirname, 'img', iconName);
+    appIcon = new Tray(iconPath);
+    appIcon.setContextMenu(Menu.buildFromTemplate([{
+        'label': 'Quit',
+        click: app.quit
+    }]));
+    
     if(store.get('token')) { startApp() }
 });
