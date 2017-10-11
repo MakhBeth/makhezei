@@ -1,0 +1,41 @@
+{
+  "name": "makhezei",
+  "version": "0.1.0",
+  "description": "Simple tool to enhance Zei functionality and add push notification on Linux",
+  "main": "main.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakhBeth/makhezei.git"
+  },
+  "keywords": [
+    "Zei",
+    "Timeular",
+    "Electron",
+    "Test",
+    "Dev",
+    "Enjoy"
+  ],
+  "author": "Davide Di Pumpo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MakhBeth/makhezei/issues"
+  },
+  "homepage": "https://github.com/MakhBeth/makhezei#readme",
+  "devDependencies": {
+    "electron": "^1.7.8",
+    "electron-store": "^1.3.0",
+    "hyperhtml": "^1.11.1",
+    "moment": "^2.19.0",
+    "node-notifier": "^5.1.2",
+    "time-counter": "^1.0.0",
+    "viperhtml": "^2.6.1"
+  },
+  "dependencies": {
+    "http-debug": "^0.1.2",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  }
+}
