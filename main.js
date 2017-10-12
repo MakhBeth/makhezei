@@ -2,7 +2,9 @@ const electron = require('electron')
 // Module to control application life.
 const app = electron.app
 
-app.dock.hide()
+if(app.dock) {
+    app.dock.hide()
+}
 
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
@@ -10,6 +12,12 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path');
 const url = require('url');
 
+
+function windowEmit(event, obj) {
+    if(mainWindow) {
+        mainWindow.webContents.send(event, obj);
+    }
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -128,7 +136,7 @@ async function logUser (public, private) {
         }
     );
     const user = await getUser();
-    mainWindow.webContents.send('user', user);
+    windowEmit('user', user);
     store.set('user', user);
     startApp();
 }
@@ -151,7 +159,7 @@ async function getTracking () {
         }
     );
     const track = await tracking();
-    mainWindow.webContents.send('tracking', track);
+    windowEmit('tracking', track);
     return track;
 }
 
@@ -170,7 +178,7 @@ async function getActivities () {
         }
     );
     const activities = await getActivities();
-    mainWindow.webContents.send('activities', activities);
+    windowEmit('activities', activities);
     return activities.activities;
 }
 
@@ -213,7 +221,7 @@ async function startActivity (id) {
         }
     );
     const activity = await postActivity();
-    mainWindow.webContents.send('activity-stopped', activity);
+    windowEmit('activity-stopped', activity);
 }
 async function startApp () {
     setInterval(async function() {
@@ -323,6 +331,8 @@ app.on('ready', async () => {
         'label': 'Quit',
         click: app.quit
     }]));
+
     
     if(store.get('token')) { startApp() }
+
 });
