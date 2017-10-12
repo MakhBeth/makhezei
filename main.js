@@ -243,6 +243,10 @@ async function startApp () {
     countUpTimer.on('change', (time) => {
         appIcon.setTitle(countUpTimer.config.string + ' ' + time);
         appIcon.setToolTip(countUpTimer.config.string + ' ' + time);
+        appIcon.message = {
+            title: countUpTimer.config.string,
+            msg: time
+        };
     });
 
     const activities = await getActivities();
@@ -285,6 +289,7 @@ async function startApp () {
     function osUpdate (tracking) {
         if (tracking.currentTracking) {
             notifier.notify({
+                icon: path.resolve(__dirname, 'img', 'icon.png'),
                 title: 'Tracking started',
                 message: tracking.currentTracking.activity.name
             });
@@ -306,11 +311,16 @@ async function startApp () {
             
         } else {
             notifier.notify({
+                icon: path.resolve(__dirname, 'img', 'icon.png'),
                 title: 'Tracking stopped',
                 message: 'Enjoy!'
             });
             countUpTimer.stop();
             appIcon.setTitle('');
+            appIcon.message = {
+                title: 'Not tracking',
+                msg: 'Nothing to show'
+            };
             menuItems[stopIndex] = {
                 'label': 'Tracking stopped',
             };
@@ -331,7 +341,17 @@ app.on('ready', async () => {
         'label': 'Quit',
         click: app.quit
     }]));
-
+    appIcon.message = {
+        title: 'Loading',
+        msg: 'Nothing to show'
+    };
+    appIcon.on('click', (e) => {
+        notifier.notify({
+            icon: path.resolve(__dirname, 'img', 'icon.png'),
+            title: appIcon.message.title,
+            message: appIcon.message.msg
+        });
+    })
     
     if(store.get('token')) { startApp() }
 
