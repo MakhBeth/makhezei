@@ -76,6 +76,8 @@ const Tray = require('electron').Tray;
 const Menu = require('electron').Menu;
 var moment = require('moment');
 var Timer = require('time-counter');
+const hostile = require('hostile');
+const sudo = require('sudo-prompt');
 
 var https = require('https');
 
@@ -275,7 +277,29 @@ async function startApp () {
     )
     menuItems.push(
         {'type': 'separator'},
-        {'label': 'Settings'},
+        {
+            'label': 'Block social',
+            click: () => {
+                sudo.exec(`hostile load ${path.resolve(__dirname, "hosts", 'hosts.txt')}`, {name : 'MakheZei'},
+                    function(error, stdout, stderr) {
+                    if (error) throw error;
+                    console.log('stdout: ' + stdout);
+                    }
+                );
+            }
+        },
+        {
+            'label': 'Unlock social',
+            click: () => {
+                sudo.exec(`hostile unload ${path.resolve(__dirname, "hosts", 'hosts.txt')}`, {name : 'MakheZei'},
+                    function(error, stdout, stderr) {
+                    if (error) throw error;
+                    console.log('stdout: ' + stdout);
+                    }
+                );
+            }
+            
+        },
         {'type': 'separator'},
         {
             'label': 'Quit',
@@ -346,6 +370,7 @@ app.on('ready', async () => {
         msg: 'Nothing to show'
     };
     appIcon.on('click', (e) => {
+        console.log(2);
         notifier.notify({
             icon: path.resolve(__dirname, 'img', 'icon.png'),
             title: appIcon.message.title,
